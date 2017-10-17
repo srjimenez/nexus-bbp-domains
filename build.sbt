@@ -80,11 +80,24 @@ lazy val atlas = project
     buildInfoPackage := "ch.epfl.bluebrain.nexus.bbp.domains.atlas"
   )
 
+lazy val morphology = project
+  .in(file("modules/bbp-morphology"))
+  .enablePlugins(BuildInfoPlugin)
+  .dependsOn(experiment, workbench % Test)
+  .dependsOn(workbench % Test)
+  .settings(common, buildInfoSettings)
+  .settings(
+    name := "bbp-morphology-schemas",
+    moduleName := "bbp-morphology-schemas",
+    libraryDependencies ++= Seq(scalaTest % Test),
+    buildInfoPackage := "ch.epfl.bluebrain.nexus.bbp.domains.morphology"
+  )
+
 lazy val root = project
   .in(file("."))
   .settings(name := "bbp-schemas", moduleName := "bbp-schemas")
   .settings(common, noPublish)
-  .aggregate(docs, workbench, core, experiment, atlas)
+  .aggregate(docs, workbench, core, experiment, atlas, morphology)
 
 lazy val buildInfoSettings = Seq(
   buildInfoKeys := Seq[BuildInfoKey](
